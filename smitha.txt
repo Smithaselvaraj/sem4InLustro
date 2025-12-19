@@ -1,0 +1,173 @@
+import java.util.Scanner;
+
+public class Task{
+
+    private static String[] taskTitles = new String[50];
+    private static String[] taskDescriptions = new String[50];
+    private static String[] taskStatuses = new String[50];
+    private static String[] studentNames = new String[50];
+    private static int taskCount = 0;
+
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+
+        printWelcome();
+        boolean running = true;
+
+        while (running) {
+            displayMenu();
+            System.out.print("Enter your choice: ");
+            String input = scanner.nextLine();
+
+            switch (input) {
+                case "1":
+                    addTask();
+                    break;
+
+                case "2":
+                    viewTasks();
+                    break;
+
+                case "3":
+                    searchTasks();
+                    break;
+
+                case "4":
+                    updateTaskStatus();
+                    break;
+
+                case "5":
+                    running = false;
+                    System.out.println("Goodbye!");
+                    break;
+
+                default:
+                    System.out.println("\nInvalid choice! Please enter 1, 2, 3 or 4.\n");
+            }
+        }
+        scanner.close();
+    }
+
+    private static void printWelcome() {
+        System.out.println("Welcome to Student Task Management");
+        System.out.println();
+    }
+
+    private static void displayMenu() {
+        System.out.println("TASK MANAGEMENT MENU");
+        System.out.println("1. Add Task");
+        System.out.println("2. View Tasks");
+        System.out.println("3. Search Tasks");
+        System.out.println("4. Update task");
+        System.out.println("5. Exit");
+        System.out.println("==============");
+    }
+
+    private static void addTask() {
+        if (taskCount >= 50) {
+            System.out.println("Task storage is full!");
+            return;
+        }
+
+        System.out.print("Enter student name: ");
+        studentNames[taskCount] = scanner.nextLine();
+
+        System.out.print("Enter task title: ");
+        taskTitles[taskCount] = scanner.nextLine();
+
+        System.out.print("Enter task description: ");
+        taskDescriptions[taskCount] = scanner.nextLine();
+
+        taskStatuses[taskCount] = "Pending";
+        taskCount++;
+
+        System.out.println("\nTask added successfully!\n");
+    }
+
+    private static void viewTasks() {
+        System.out.println("\n--- All Tasks ---");
+
+        if (taskCount == 0) {
+            System.out.println("No tasks available.\n");
+            return;
+        }
+
+        for (int i = 0; i < taskCount; i++) {
+            System.out.println(
+                (i + 1) + ". [" + taskStatuses[i] + "] " +
+                taskTitles[i] + " - " + studentNames[i] + taskDescriptions[i]
+            );
+        }
+        System.out.println();
+    }
+
+    private static void searchTasks() {
+        System.out.print("\nEnter search keyword: ");
+        String keyword = scanner.nextLine().toLowerCase();
+
+        int found = 0;
+        System.out.println("\nSearch results:");
+
+        for (int i = 0; i < taskCount; i++) {
+            if (taskTitles[i].toLowerCase().contains(keyword) ||
+                taskDescriptions[i].toLowerCase().contains(keyword) ||
+                studentNames[i].toLowerCase().contains(keyword)) {
+
+                System.out.println(
+                    (i + 1) + ". [" + taskStatuses[i] + "] " +
+                    taskTitles[i] + " - " + studentNames[i]
+                );
+                found++;
+            }
+        }
+
+        if (found == 0) {
+            System.out.println("No tasks matching \"" + keyword + "\"");
+        } else {
+            System.out.println("\nFound " + found + " task(s).");
+        }
+        System.out.println();
+    }
+    private static void updateTaskStatus(){
+        System.out.println("Update tasks status");
+        if(taskCount==0){
+            System.out.println("No tasks to update");
+            return;
+        }
+    viewTasks();
+    System.out.println("Enter tasks no to update:");
+    String input=scanner.nextLine();
+    
+        int taskNum=Integer.parseInt(input);
+    if(taskNum<1 || taskNum>taskCount){
+        System.out.println("Invalid task number!!");
+        return;
+    }
+    
+    System.out.println("Select new status");
+    System.out.println("1.Pending");
+    System.out.println("2.In progress");
+    System.out.println("3.Completed");
+    System.out.println("Enter choice");
+    String statusChoice=scanner.nextLine();
+
+    switch(statusChoice){
+        case "1":
+            taskStatuses[taskNum-1]="Pending";
+            break;
+        case "2":
+            taskStatuses[taskNum-1]="In progress";
+            break;
+        case "3":
+            taskStatuses[taskNum-1]="Completed";
+            break;
+        default:
+            System.out.println("Invalid choice");
+            return;
+    }
+    System.out.println("Status updated successfully!!");
+
+    } 
+    }
+
